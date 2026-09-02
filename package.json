@@ -1,0 +1,29 @@
+{
+  "name": "cse341-books",
+  "version": "1.0.0",
+  "description": "CSE 341 Repository for Weeks 1 &amp; 2",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --env-file=.env server.js",
+    "dev": "nodemon --env-file=.env server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/macsandoval1999/cse341-books.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/macsandoval1999/cse341-books/issues"
+  },
+  "homepage": "https://github.com/macsandoval1999/cse341-books#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
