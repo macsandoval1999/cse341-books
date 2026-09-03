@@ -15,7 +15,7 @@ app.use(express.json());
 
 /* Routes */
 app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Welcome to the CSE 341 Books API!' });
+    return res.status(200).json({ message: 'Welcome to the CSE 341 Books API!' });
 });
 
 

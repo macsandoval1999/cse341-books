@@ -4,9 +4,11 @@
   "description": "CSE 341 Repository for Weeks 1 &amp; 2",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file=.env server.js",
-    "dev": "nodemon --env-file=.env server.js"
+    "dev": "nodemon --env-file=.env server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "eslint": "^10.9.1",
     "nodemon": "^3.1.14"
   }
 }
