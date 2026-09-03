@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/macsandoval1999/cse341-books#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongodb": "^7.6.0"
   },
   "devDependencies": {
     "eslint": "^10.9.1",
