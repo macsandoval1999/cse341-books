@@ -1,6 +1,7 @@
 /* Imports */
 import express from "express";
-import { getAllBooksHandler } from "./controllers/books.js";
+import { getAllBooksHandler, getBookByIdHandler } from "./controllers/books.js";
+
 
 
 
@@ -11,7 +12,7 @@ const router = express.Router();
 
 /* Routes */
 router.get("/books", getAllBooksHandler);
-
+router.get("/books/:id", getBookByIdHandler);
 
 
 /* Exports */
