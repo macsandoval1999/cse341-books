@@ -17,11 +17,14 @@ const startServer = async () => {
     try {
         await connectToDb();
         console.log('Connected to MongoDB');
+
         app.listen(PORT, () => {
             console.log(`Server is listening at http://127.0.0.1:${PORT}`);
         });
+
     } catch (error) {
-        console.error('Error starting server:', error);
+        console.error('Database Connection Error:', error.message);
+        process.exit(1); // Exit the process with an error code
     }
 }
 
