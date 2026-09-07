@@ -1,6 +1,6 @@
 /* Imports */
 import express from 'express';
-import { getDb } from './src/db/connect.js';
+import router from './src/router.js';
 
 
 
@@ -10,23 +10,16 @@ const app = express();
 
 
 /* Middleware */
+
+// Parse JSON request bodies
 app.use(express.json());
 
+// Use the router for handling routes
+app.use(router);
 
-
-/* Routes */
+// Default route for the root path
 app.get('/', (req, res) => {
     return res.status(200).json({ message: 'Welcome to the CSE 341 Books API!' });
-});
-
-app.get('/trails', async (req, res) => {
-    try {
-        const allTrails = await getDb().collection('trails').find().toArray();
-        return res.status(200).json({ All_Trails: allTrails });
-    } catch (error) {
-        console.error('Error fetching trails:', error.message);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
 });
 
 
