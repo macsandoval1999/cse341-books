@@ -67,6 +67,9 @@ const patchAuthorByIdHandler = async (req, res) => {
         if (!existing_author) {
             return res.status(404).json({ message: "Author not found" });
         }
+        if (!updateData || Object.keys(updateData).length === 0) {
+            return res.status(400).json({ message: "No data provided for update" });
+        }
         await patchAuthorById(requested_id, updateData);
         return res.status(200).json({ message: "Author updated successfully", author: await getAuthorById(requested_id) });
     } catch (error) {

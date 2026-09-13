@@ -2,7 +2,11 @@
 import express from "express";
 import {
     getAllBooksHandler,
-    getBookByIdHandler
+    getBookByIdHandler,
+    postBookHandler,
+    patchBookByIdHandler,
+    putBookByIdHandler,
+    deleteBookByIdHandler
 } from "./controllers/books.js";
 
 import {
@@ -122,6 +126,8 @@ router.post("/authors", postAuthorHandler);
  *     responses:
  *       '200':
  *         description: Author updated successfully.
+ *       '400':
+ *         description: Bad request. No data provided for update.
  *       '404':
  *         description: Author was not found.
  *       '500':
@@ -197,18 +203,17 @@ router.delete("/authors/:id", deleteAuthorByIdHandler);
 /**
  * @openapi
  * /books:
- *  get:
- *    tags:
- *      - Books
- *   summary: Get all books
- *  description: Returns every book in the books collection
- *  responses:
- *     '200':
- *      description: Books retrieved successfully
- *    '500':
- *      description: Internal server error
+ *   get:
+ *     tags:
+ *       - Books
+ *     summary: Get all books
+ *     description: Returns every book in the books collection
+ *     responses:
+ *       '200':
+ *         description: Books retrieved successfully
+ *       '500':
+ *         description: Internal server error
  */
-
 router.get("/books", getAllBooksHandler);
 
 /**
@@ -226,6 +231,7 @@ router.get("/books", getAllBooksHandler);
  *         description: The ID of the book to retrieve, such as b1
  *         schema:
  *           type: string
+ *         example: b1
  *     responses:
  *       '200':
  *         description: Book retrieved successfully.
@@ -235,6 +241,137 @@ router.get("/books", getAllBooksHandler);
  *         description: Internal server error.
  */
 router.get("/books/:id", getBookByIdHandler);
+
+/**
+ * @openapi
+ * /books:
+ *   post:
+ *     tags:
+ *       - Books
+ *     summary: Create a new book
+ *     description: Creates a new book document in the books collection
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *           example:
+ *             id: b3
+ *             title: The Great Gatsby
+ *             authorId: a3
+ *             publicationDate: 1925
+ *     responses:
+ *       '201':
+ *         description: Book created successfully.
+ *       '400':
+ *         description: Bad request. Missing required fields.
+ *       '409':
+ *         description: Conflict. Book ID already exists.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.post("/books", postBookHandler);
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   patch:
+ *     tags:
+ *       - Books
+ *     summary: Update an existing book
+ *     description: Updates an existing book document in the books collection
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the book to update, such as b1
+ *         schema:
+ *           type: string
+ *         example: b1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *           example:
+ *             title: Pride and Prejudice
+ *     responses:
+ *       '200':
+ *         description: Book updated successfully.
+ *       '400':
+ *         description: Bad request. No data provided for update.
+ *       '404':
+ *         description: Book was not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.patch("/books/:id", patchBookByIdHandler);
+
+/**
+* @openapi
+* /books/{id}:
+*   put:
+*     tags:
+*       - Books
+*     summary: Replace an existing book
+*     description: Replaces an existing book document in the books collection
+*     parameters:
+*       - name: id
+*         in: path
+*         required: true
+*         description: The ID of the book to replace, such as b1
+*         schema:
+*           type: string
+*         example: b1
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             $ref: '#/components/schemas/Book'
+*           example:
+*             title: Pride and Prejudice
+*             authorId: a1
+*             publicationDate: 1813
+*     responses:
+*       '200':
+*         description: Book replaced successfully.
+*       '400':
+*         description: Bad request. Missing required fields.
+*       '404':
+*         description: Book was not found.
+*       '500':
+*         description: Internal server error.
+*/
+router.put("/books/:id", putBookByIdHandler);
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   delete:
+ *     tags:
+ *       - Books
+ *     summary: Delete an existing book
+ *     description: Deletes an existing book document from the books collection
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the book to delete, such as b1
+ *         schema:
+ *           type: string
+ *         example: b1
+ *     responses:
+ *       '200':
+ *         description: Book deleted successfully.
+ *       '404':
+ *         description: Book was not found.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.delete("/books/:id", deleteBookByIdHandler);
 
 /**
  * @openapi
@@ -261,32 +398,34 @@ router.get("/books/:id", getBookByIdHandler);
  *         id: a1
  *         name: Jane Austen
  *         birthYear: 1775
- * 
+ *
  *     Book:
  *       description: A book object
  *       type: object
  *       required:
+ *         - id
  *         - title
  *         - authorId
+ *         - publicationDate
  *       properties:
- *         _id:
+ *         id:
  *           type: string
  *           example: b1
  *         title:
  *           type: string
  *           example: Pride and Prejudice
- *         publicationDate:
- *           type: integer
- *           example: 1813
  *         authorId:
  *           type: string
  *           example: a1
+ *         publicationDate:
+ *           type: integer
+ *           example: 1813
  *       example:
- *         _id: b1
+ *         id: b1
  *         title: Pride and Prejudice
- *         publicationDate: 1813
  *         authorId: a1
- * 
+ *         publicationDate: 1813
+ *
  *     Error:
  *       description: Error response
  *       type: object

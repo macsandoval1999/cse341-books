@@ -131,6 +131,9 @@
           "200": {
             "description": "Author updated successfully."
           },
+          "400": {
+            "description": "Bad request. No data provided for update."
+          },
           "404": {
             "description": "Author was not found."
           },
@@ -227,32 +230,47 @@
         "description": "Returns every book in the books collection",
         "responses": {
           "200": {
-            "description": "Books retrieved successfully",
-            "content": {
-              "application/json": {
-                "example": [
-                  {
-                    "_id": "b1",
-                    "title": "Pride and Prejudice",
-                    "authorId": "a1",
-                    "publishedYear": 1813,
-                    "genre": "Classic",
-                    "description": "A witty story about manners, marriage, and first impressions."
-                  },
-                  {
-                    "_id": "b2",
-                    "title": 1984,
-                    "authorId": "a2",
-                    "publishedYear": 1949,
-                    "genre": "Dystopian",
-                    "description": "A chilling warning about surveillance and authoritarian power."
-                  }
-                ]
-              }
-            }
+            "description": "Books retrieved successfully"
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Create a new book",
+        "description": "Creates a new book document in the books collection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              },
+              "example": {
+                "id": "b3",
+                "title": "The Great Gatsby",
+                "authorId": "a3",
+                "publicationDate": 1925
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Book created successfully."
+          },
+          "400": {
+            "description": "Bad request. Missing required fields."
+          },
+          "409": {
+            "description": "Conflict. Book ID already exists."
+          },
+          "500": {
+            "description": "Internal server error."
           }
         }
       }
@@ -278,29 +296,134 @@
         ],
         "responses": {
           "200": {
-            "description": "Book retrieved successfully.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "_id": "b1",
-                  "title": "Pride and Prejudice",
-                  "authorId": "a1",
-                  "publishedYear": 1813,
-                  "genre": "Classic",
-                  "description": "A witty story about manners, marriage, and first impressions."
-                }
-              }
-            }
+            "description": "Book retrieved successfully."
           },
           "404": {
-            "description": "Book was not found.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Book not found"
-                }
+            "description": "Book was not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Update an existing book",
+        "description": "Updates an existing book document in the books collection",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to update, such as b1",
+            "schema": {
+              "type": "string"
+            },
+            "example": "b1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              },
+              "example": {
+                "title": "Pride and Prejudice"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book updated successfully."
+          },
+          "400": {
+            "description": "Bad request. No data provided for update."
+          },
+          "404": {
+            "description": "Book was not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Replace an existing book",
+        "description": "Replaces an existing book document in the books collection",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to replace, such as b1",
+            "schema": {
+              "type": "string"
+            },
+            "example": "b1"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              },
+              "example": {
+                "title": "Pride and Prejudice",
+                "authorId": "a1",
+                "publicationDate": 1813
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book replaced successfully."
+          },
+          "400": {
+            "description": "Bad request. Missing required fields."
+          },
+          "404": {
+            "description": "Book was not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Delete an existing book",
+        "description": "Deletes an existing book document from the books collection",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to delete, such as b1",
+            "schema": {
+              "type": "string"
+            },
+            "example": "b1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book deleted successfully."
+          },
+          "404": {
+            "description": "Book was not found."
           },
           "500": {
             "description": "Internal server error."
@@ -343,11 +466,13 @@
         "description": "A book object",
         "type": "object",
         "required": [
+          "id",
           "title",
-          "authorId"
+          "authorId",
+          "publicationDate"
         ],
         "properties": {
-          "_id": {
+          "id": {
             "type": "string",
             "example": "b1"
           },
@@ -355,20 +480,20 @@
             "type": "string",
             "example": "Pride and Prejudice"
           },
-          "publicationDate": {
-            "type": "integer",
-            "example": 1813
-          },
           "authorId": {
             "type": "string",
             "example": "a1"
+          },
+          "publicationDate": {
+            "type": "integer",
+            "example": 1813
           }
         },
         "example": {
-          "_id": "b1",
+          "id": "b1",
           "title": "Pride and Prejudice",
-          "publicationDate": 1813,
-          "authorId": "a1"
+          "authorId": "a1",
+          "publicationDate": 1813
         }
       },
       "Error": {
